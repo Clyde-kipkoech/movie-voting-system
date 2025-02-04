@@ -4,3 +4,15 @@
 .App {
   background-color: #111;
 }
+.toggle-btn{
+  background-color: #e50914;
+  color: white;
+  padding: 10px 15px;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  margin-top: 10px;
+  margin-right: 50px;
+}
