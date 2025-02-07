@@ -1,28 +1,32 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "./SignIn.css";
 
 function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    
-    // Dummy Authentication
-    if (email === "admin@example.com" && password === "admin123") {
-      navigate("/admin-dashboard");
-    } else if (email && password) {
+
+    try {
+      const response = await axios.post("http://localhost:3000/signin", {
+        email,
+        password,
+      });
+      alert(response.data.message);
       navigate("/voting");
-    } else {
-      alert("Invalid credentials");
+    } catch (error) {
+      alert(error.response?.data?.message || "Sign-in failed.");
     }
   };
 
   return (
     <div className="sign-in-container">
-      <h2>Sign In</h2>
       <form onSubmit={handleSignIn}>
+        <h2>Sign In</h2>
         <input
           type="email"
           placeholder="Email"

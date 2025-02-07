@@ -8,9 +8,9 @@ import requests from "./requests";
 import Banner from './Banner';
 import Nav from './Nav';
 import VotingPage from './VotingPage';
-import AdminDashboard from "./AdminDashboard";
 import SignUp from './SignUp';
 import SignIn from './SignIn';
+import AdminDashboard from "./AdminDashboard";
 
 function App() {
   return (
@@ -18,14 +18,6 @@ function App() {
       <div className="App">
         <Nav />
         <Routes>
-          {/* Voting Page */}
-          <Route path="/voting" element={<VotingPage />} />
-          
-          {/* Admin Pages */}
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          {/* Main Page with Rows */}
           <Route path="/" element={
             <>
               <Banner />
@@ -39,14 +31,14 @@ function App() {
               <Row title="Documentaries" fetchUrl={requests.fetchDocumentaries} />
             </>
           } />
-          
-          {/* Voting Page */}
           <Route path="/voting" element={<VotingPage />} />
-          
-          {/* Admin Pages */}
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
+
+        
+
         </Routes>
       </div>
     </Router>

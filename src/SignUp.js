@@ -1,22 +1,29 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./SignUp.css";
 
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    // Simulate sign-up logic; redirecting for simplicity
-    alert("Sign-up successful!");
-    navigate("/sign-in");
+
+    try {
+      const response = await axios.post("http://localhost:3000/signup",  {
+        email,
+        password,
+      });
+      alert(response.data.message);
+    } catch (error) {
+      alert(error.response?.data?.message || "Sign-up failed.");
+    }
   };
 
   return (
     <div className="sign-up-container">
-      <h2>Sign Up</h2>
       <form onSubmit={handleSignUp}>
+        <h2>Sign Up</h2>
         <input
           type="email"
           placeholder="Email"

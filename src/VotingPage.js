@@ -1,49 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import requests from "./requests";
+import "./VotingPage.css";
 
 const VotingPage = () => {
-  // Sample movie data (replace this with your API or database)
-  const movies = [
-    { id: 1, title: "Inception" },
-    { id: 2, title: "The Dark Knight" },
-    { id: 3, title: "Interstellar" },
-  ];
-
+  const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
+
+  // Fetch movies on component mount
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const response = await fetch(`https://api.themoviedb.org/3${requests.fetchTrending}`);
+        const data = await response.json();
+        setMovies(data.results); // Store movie data
+      } catch (error) {
+        console.error("Error fetching trending movies:", error);
+      }
+    };
+
+    fetchMovies();
+  }, []);
 
   const handleVote = () => {
     if (selectedMovie) {
-      alert(`Voted for: ${selectedMovie}`);
-      // Send vote data to your backend API
+      alert(`You voted for: "${selectedMovie.title}"`);
     } else {
-      alert("Please select a movie to vote for.");
+      alert("Please select a movie to vote.");
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-8">
-      <h1 className="text-3xl font-bold mb-6">Vote for a Movie</h1>
+    <div className="voting-container">
+      <h1 className="voting-title">Vote for Your Favorite Movie 🎥</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="movie-grid">
         {movies.map((movie) => (
           <div
             key={movie.id}
-            onClick={() => setSelectedMovie(movie.title)}
-            className={`p-4 rounded-lg cursor-pointer text-center ${
-              selectedMovie === movie.title
-                ? "bg-green-600"
-                : "bg-gray-800 hover:bg-gray-700"
-            }`}
+            onClick={() => setSelectedMovie(movie)}
+            className={`movie-card ${selectedMovie?.id === movie.id ? "selected-movie" : ""}`}
           >
-            {movie.title}
+            <img
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
+              className="movie-poster"
+            />
+            <h3>{movie.title}</h3>
           </div>
         ))}
       </div>
 
-      <button
-        onClick={handleVote}
-        className="bg-blue-600 hover:bg-blue-500 px-6 py-2 rounded-xl mt-4"
-      >
-        Submit Vote
+      <button onClick={handleVote} className="vote-button">
+        Submit Your Vote
       </button>
     </div>
   );

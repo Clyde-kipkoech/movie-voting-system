@@ -59,6 +59,7 @@ function Row({title,fetchUrl,isLargeRow}) {
      {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}
     </div>
   )
+  
 }
 
 export default Row

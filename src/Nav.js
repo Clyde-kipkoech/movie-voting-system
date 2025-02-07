@@ -11,8 +11,13 @@ function Nav() {
       <Link to="/voting">
         <button className="nav_votingButton">Voting Page</button>
       </Link>
-      <Link to="/sign-in" className="nav_link">Sign In</Link>
-        <Link to="/sign-up" className="nav_link">Sign Up</Link>
+      <Link to="/signin" className="nav_link">
+        <button className="nav_button">Sign In</button>
+      </Link>
+      
+      <Link to="/signup" className="nav_link">
+        <button className="nav_button">Sign Up</button>
+      </Link>
     </div>
   );
 }
