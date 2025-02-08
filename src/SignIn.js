@@ -17,11 +17,13 @@ function SignIn() {
         password,
       });
       alert(response.data.message);
+      console.log(response)
       navigate("/voting");
     } catch (error) {
       alert(error.response?.data?.message || "Sign-in failed.");
     }
   };
+  
 
   return (
     <div className="sign-in-container">

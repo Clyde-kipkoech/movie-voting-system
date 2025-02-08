@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios"; // Import Axios for API calls
 import requests from "./requests";
 import "./VotingPage.css";
 
@@ -6,13 +7,12 @@ const VotingPage = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
-  // Fetch movies on component mount
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const response = await fetch(`https://api.themoviedb.org/3${requests.fetchTrending}`);
         const data = await response.json();
-        setMovies(data.results); // Store movie data
+        setMovies(data.results);
       } catch (error) {
         console.error("Error fetching trending movies:", error);
       }
@@ -21,11 +21,23 @@ const VotingPage = () => {
     fetchMovies();
   }, []);
 
-  const handleVote = () => {
-    if (selectedMovie) {
-      alert(`You voted for: "${selectedMovie.title}"`);
-    } else {
+  const handleVote = async () => {
+    if (!selectedMovie) {
       alert("Please select a movie to vote.");
+      return;
+    }
+
+    try {
+      // Replace `userId` with the actual logged-in user ID if available
+      const userId = 1; 
+      const response = await axios.post("http://localhost:3000/vote", {
+        movieId: selectedMovie.id,
+        userId: userId,
+      });
+
+      alert(response.data.message);
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to record vote.");
     }
   };
 

@@ -5,7 +5,21 @@ const bcrypt = require("bcrypt");
 const app = express();
 
 
-app.use(cors());
+
+const allowedOrigins = ["http://localhost:3001", "*"];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 const db = mysql.createConnection({
@@ -49,34 +63,59 @@ app.post("/signup", async (req, res) => {
 
 // Signin API endpoint
 app.post("/signin", (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required!" });
+  const { email, password } = req.body;
+  console.log("Signin request received:", req.body);
+
+  if (!email || !password) {
+    console.log("Missing credentials");
+    return res.status(400).json({ message: "Email and password are required!" });
+  }
+
+  const query = "SELECT password FROM users WHERE email = ?";
+  db.query(query, [email], async (err, results) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ message: "Internal server error." });
     }
-  
-    // Example query for verification
-    const query = "SELECT password FROM users WHERE email = ?";
-    db.query(query, [email], async (err, results) => {
-      if (err) {
-        console.error("Database error:", err);
-        return res.status(500).json({ message: "Internal server error." });
-      }
-  
-      if (results.length === 0) {
-        return res.status(401).json({ message: "Invalid email or password." });
-      }
-  
-      const storedPassword = results[0].password;
-      const isPasswordMatch = await bcrypt.compare(password, storedPassword);
-  
-      if (!isPasswordMatch) {
-        return res.status(401).json({ message: "Invalid email or password." });
-      }
-  
-      res.status(200).json({ message: "Sign-in successful!" });
-    });
+
+    if (results.length === 0) {
+      console.log("Invalid email");
+      return res.status(401).json({ message: "Invalid email or password." });
+    }
+
+    const storedPassword = results[0].password;
+    const isPasswordMatch = await bcrypt.compare(password, storedPassword);
+
+    if (!isPasswordMatch) {
+      console.log("Password mismatch");
+      return res.status(401).json({ message: "Invalid email or password." });
+    }
+
+    res.status(200).json({ message: "Sign-in successful!",user:results.email });
   });
+});
+
+  //voting end point
+  // Voting API endpoint
+app.post("/vote", (req, res) => {
+  const { movieId, userId } = req.body;
+
+  if (!movieId || !userId) {
+    return res.status(400).json({ message: "Movie ID and User ID are required!" });
+  }
+
+  const query = "INSERT INTO votes (movie_id, user_id) VALUES (?, ?)";
   
+  db.query(query, [movieId, userId], (err, result) => {
+    if (err) {
+      console.error("Database error:", err);
+      return res.status(500).json({ message: "Failed to record vote." });
+    }
+    res.status(201).json({ message: "Vote recorded successfully!" });
+  });
+});
+
+
 
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
