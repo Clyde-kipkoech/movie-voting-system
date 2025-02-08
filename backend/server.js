@@ -61,39 +61,34 @@ app.post("/signup", async (req, res) => {
 });
 
 
-// Signin API endpoint
+// Signin Api endpoint
 app.post("/signin", (req, res) => {
   const { email, password } = req.body;
-  console.log("Signin request received:", req.body);
+  const query = "SELECT email, password, role FROM users WHERE email = ?";
 
-  if (!email || !password) {
-    console.log("Missing credentials");
-    return res.status(400).json({ message: "Email and password are required!" });
-  }
-
-  const query = "SELECT password FROM users WHERE email = ?";
   db.query(query, [email], async (err, results) => {
     if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ message: "Internal server error." });
+      return res.status(500).json({ message: "Server error." });
     }
 
     if (results.length === 0) {
-      console.log("Invalid email");
-      return res.status(401).json({ message: "Invalid email or password." });
+      return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    const storedPassword = results[0].password;
-    const isPasswordMatch = await bcrypt.compare(password, storedPassword);
+    const user = results[0];
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    if (!isPasswordMatch) {
-      console.log("Password mismatch");
-      return res.status(401).json({ message: "Invalid email or password." });
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    res.status(200).json({ message: "Sign-in successful!",user:results.email });
+    res.status(200).json({
+      message: "Sign-in successful!",
+      role: user.role,
+    });
   });
 });
+
 
   //voting end point
   // Voting API endpoint

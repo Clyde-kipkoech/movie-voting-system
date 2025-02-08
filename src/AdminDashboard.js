@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from "react";
 
 function AdminDashboard() {
+  useEffect(() => {
+    console.log("Admin Dashboard loaded");
+  }, []);
+
   return (
     <div>
-      <h1>Welcome to the Admin Dashboard</h1>
-      <p>This is where the admin panel information goes.</p>
+      <h1>Admin Dashboard</h1>
     </div>
   );
 }

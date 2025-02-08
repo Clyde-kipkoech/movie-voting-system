@@ -10,15 +10,18 @@ function SignIn() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await axios.post("http://localhost:3000/signin", {
         email,
         password,
       });
-      alert(response.data.message);
-      console.log(response)
-      navigate("/voting");
+  
+      if (response.data.role === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/voting");
+      }
     } catch (error) {
       alert(error.response?.data?.message || "Sign-in failed.");
     }
@@ -50,3 +53,4 @@ function SignIn() {
 }
 
 export default SignIn;
+
