@@ -23,11 +23,13 @@ app.use(
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "Clyde@123",
-  database: "movie_voting_system",
-});
+  host: 'localhost',
+  user: 'root',
+  password: 'your_password',
+  database: 'your_database_name',
+}).promise(); // Important to add `.promise()` here
+
+module.exports = db;
 
 db.connect((err) => {
   if (err) {
@@ -91,23 +93,69 @@ app.post("/signin", (req, res) => {
 
 
   //voting end point
-  // Voting API endpoint
-app.post("/vote", (req, res) => {
-  const { movieId, userId } = req.body;
-
-  if (!movieId || !userId) {
-    return res.status(400).json({ message: "Movie ID and User ID are required!" });
-  }
-
-  const query = "INSERT INTO votes (movie_id, user_id) VALUES (?, ?)";
+  app.post('/vote', (req, res) => {
+    const { movieId, userId } = req.body;
   
-  db.query(query, [movieId, userId], (err, result) => {
-    if (err) {
-      console.error("Database error:", err);
-      return res.status(500).json({ message: "Failed to record vote." });
+    // Validate request body
+    if (!movieId || !userId) {
+      return res.status(400).json({ message: "Movie ID and User ID are required!" });
     }
-    res.status(201).json({ message: "Vote recorded successfully!" });
+  
+    // Check if the vote already exists
+    const checkVoteQuery = "SELECT * FROM votes WHERE movie_id = ? AND user_id = ?";
+    db.query(checkVoteQuery, [movieId, userId], (err, results) => {
+      if (err) {
+        console.error("Database error while checking vote:", err);
+        return res.status(500).json({ message: "Database error while checking vote." });
+      }
+  
+      if (results.length > 0) {
+        return res.status(400).json({ message: "User has already voted for this movie." });
+      }
+  
+      // Insert new vote
+      const insertVoteQuery = "INSERT INTO votes (movie_id, user_id) VALUES (?, ?)";
+      db.query(insertVoteQuery, [movieId, userId], (err) => {
+        if (err) {
+          console.error("Error inserting vote:", err);
+          return res.status(500).json({ message: "Failed to record vote." });
+        }
+        res.status(201).json({ message: "Vote recorded successfully!" });
+      });
+    });
   });
+  
+  
+  
+//api endpoint fetching voting results
+app.get('/api/votes', (req, res) => {
+  const query = `
+    SELECT m.title, COUNT(v.vote_id) AS votes 
+    FROM votes v 
+    JOIN movies m ON v.movie_id = m.movie_id 
+    GROUP BY m.title
+  `;
+  db.query(query, (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+//movies endpoint
+app.get('/api/movies', async (req, res) => {
+  const result = await db.query('SELECT * FROM movies');
+  res.json(result);
+});
+
+//movie activation end point
+app.put('/api/movies/:id/activate', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  try {
+    await db.query('UPDATE movies SET is_active = ? WHERE movie_id = ?', [status, id]);
+    res.json({ message: 'Movie status updated successfully.' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 

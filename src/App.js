@@ -14,7 +14,7 @@ import AdminDashboard from './AdminDashboard';
 
 function AppContent() {
   const location = useLocation();
-  const noNavbarRoutes = ['/signin', '/signup', '/admin-dashboard'];
+  const noNavbarRoutes = ['/signin', '/signup', '/admin-dashboard','/voting'];
 
   return (
     <div className="App">
