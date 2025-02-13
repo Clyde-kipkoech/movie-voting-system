@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./backend/firebase-config"; // Ensure correct path
 import "./SignIn.css";
 
 function SignIn() {
@@ -10,23 +11,20 @@ function SignIn() {
 
   const handleSignIn = async (e) => {
     e.preventDefault();
-  
     try {
-      const response = await axios.post("http://localhost:3000/signin", {
-        email,
-        password,
-      });
-  
-      if (response.data.role === "admin") {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Example: Check for admin role in Firestore if needed
+      if (user.email === "admin@example.com") {
         navigate("/admin-dashboard");
       } else {
         navigate("/voting");
       }
     } catch (error) {
-      alert(error.response?.data?.message || "Sign-in failed.");
+      alert(error.message || "Sign-in failed.");
     }
   };
-  
 
   return (
     <div className="sign-in-container">
@@ -47,6 +45,13 @@ function SignIn() {
           required
         />
         <button type="submit">Sign In</button>
+         {/* Link to navigate to SignUp page */}
+         <p>
+          Don't have an account?{" "}
+          <span className="signup-link" onClick={() => navigate("/signup")}>
+            Sign Up
+          </span>
+        </p>
       </form>
     </div>
   );

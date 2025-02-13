@@ -1,7 +1,7 @@
 /* Full-page layout for sign-up */
 .sign-up-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #1e293b, #0f172a);
+    background: url(https://i.pinimg.com/736x/b2/f2/4b/b2f24bfd3d0fcc2622e3f25b7acae892.jpg);
     color: white;
     display: flex;
     justify-content: center;
@@ -10,7 +10,7 @@
   }
   
   form {
-    background-color: #1f2937;
+    background: rgba(255, 255, 255, 0.8); /* Transparent white background */
     padding: 2rem;
     border-radius: 12px;
     max-width: 400px;
@@ -61,5 +61,14 @@
   
   button[type="submit"]:hover {
     background-color: #ea580c;
+  }
+  .signin-link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  
+  .signin-link:hover {
+    color: darkblue;
   }
   

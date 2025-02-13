@@ -1,15 +1,30 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { collection, addDoc, query, where, getDocs, onSnapshot } from "firebase/firestore";
+import { auth, db } from "./backend/firebase-config"; // Import Firebase auth and Firestore
+import { onAuthStateChanged } from "firebase/auth"; // Auth state listener
 import requests from "./requests";
 import "./VotingPage.css";
 
 const VotingPage = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [votes, setVotes] = useState({}); // Store vote counts
 
-  const goToHome = () => {
-    window.location.href = "/"; // Redirect to the home page
-  };
+
+  useEffect(() => {
+    // Listen for authentication state changes
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserId(user.uid); // Set Firebase Auth UID
+      } else {
+        setUserId(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -24,25 +39,70 @@ const VotingPage = () => {
     fetchMovies();
   }, []);
 
+  useEffect(() => {
+    // Fetch votes and update counts in real time
+    const votesRef = collection(db, "votes");
+    const unsubscribe = onSnapshot(votesRef, (snapshot) => {
+      const voteCounts = {};
+      snapshot.forEach((doc) => {
+        const { movieId } = doc.data();
+        voteCounts[movieId] = (voteCounts[movieId] || 0) + 1;
+      });
+      setVotes(voteCounts);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   const handleVote = async () => {
     if (!selectedMovie) {
       alert("Please select a movie to vote.");
       return;
     }
-
+    if (!userId) {
+      alert("You must be signed in to vote.");
+      return;
+    }
+  
+    // Ensure `selectedMovie.title` exists
+    if (!selectedMovie.title) {
+      console.error("Error: Movie title is undefined", selectedMovie);
+      alert("Invalid movie selection. Please try again.");
+      return;
+    }
+  
     try {
-      const userId = 1; // Replace with a dynamic user ID
-      const response = await axios.post("http://localhost:3000/vote", {
-        movieId: selectedMovie.id,
+      const votesRef = collection(db, "votes");
+  
+      // Check if the user has already voted
+      const q = query(votesRef, where("userId", "==", userId));
+      const existingVote = await getDocs(q);
+  
+      if (!existingVote.empty) {
+        alert("You have already voted!");
+        return;
+      }
+  
+      // Save the vote to Firestore
+      await addDoc(votesRef, {
         userId: userId,
+        movieId: selectedMovie.id,
+        movieTitle: selectedMovie.title, // Ensure this is defined
+        timestamp: new Date(),
       });
-
-      alert(response.data.message || "Vote recorded successfully!");
+  
+      alert("Vote recorded successfully!");
     } catch (error) {
       console.error("Voting error:", error);
-      alert(error.response?.data?.message || "Failed to record vote.");
+      alert("Failed to record vote.");
     }
   };
+  
+  const goToHome = () => {
+    window.location.href = "/"; // Redirect to the home page
+  };
+
+
 
   return (
     <div className="voting-container">
@@ -61,6 +121,7 @@ const VotingPage = () => {
               className="movie-poster"
             />
             <h3>{movie.title}</h3>
+            <p className="vote-count">Votes: {votes[movie.id] || 0}</p>
           </div>
         ))}
       </div>
@@ -69,8 +130,8 @@ const VotingPage = () => {
         Submit Your Vote
       </button>
       <button onClick={goToHome} className="home-button">
-  Go to Home
-</button>
+        Go to Home
+      </button>
 
     </div>
   );

@@ -1,48 +1,72 @@
-/* AdminDashboard.css */
-.dashboard-container {
-    padding: 2rem;
-    background-color: #f9f9f9;
-    min-height: 100vh;
-    font-family: 'Arial', sans-serif;
-  }
-  
-  .dashboard-title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 1.5rem;
-  }
-  
-  .voting-link {
-    display: inline-block;
-    background-color: #007bff;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-  }
-  
-  .voting-link:hover {
-    background-color: #0056b3;
-  }
-  
-  .results-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #444;
-    margin-top: 2rem;
-  }
-  
-  .results-list {
-    margin-top: 1rem;
-    padding-left: 0;
-    list-style: none;
-  }
-  
-  .result-item {
-    padding: 0.75rem 0;
-    border-bottom: 1px solid #ddd;
-    color: #555;
-  }
-  
+.admin-dashboard {
+  width: 80%;
+  margin: auto;
+  text-align: center;
+}
+
+.session-form {
+  background: #f4f4f4;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+
+.session-form input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.session-form button {
+  background: blue;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+}
+
+.sessions-list {
+  margin-top: 20px;
+  color: #f4f4f4;
+
+}
+
+.session-card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: black;
+}
+
+.session-card.ended {
+  background: #ffcccc;
+}
+
+.session-card button {
+  background: red;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}
+.home-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+  margin-left: 20px;
+}
+
+.home-button:hover {
+  background-color: #45a049;
+}
+

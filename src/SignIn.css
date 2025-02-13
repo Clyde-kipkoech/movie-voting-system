@@ -62,4 +62,12 @@
   button[type="submit"]:hover {
     background-color: #2563eb;
   }
+  .signup-link {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .signin-link:hover {
+    color: darkblue;
+  }
   

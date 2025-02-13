@@ -1,22 +1,29 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { auth, database } from "./backend/firebase-config";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { ref, set } from "firebase/database";
 import "./SignUp.css";
 
 function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3000/signup",  {
-        email,
-        password,
-      });
-      alert(response.data.message);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Save user data to Realtime Database
+      await set(ref(database, `users/${user.uid}`), { email });
+
+      alert("Sign-up successful!");
+      navigate("/voting"); // Navigate to the voting page
     } catch (error) {
-      alert(error.response?.data?.message || "Sign-up failed.");
+      alert(`Error: ${error.message}`);
     }
   };
 
@@ -39,9 +46,17 @@ function SignUp() {
           required
         />
         <button type="submit">Sign Up</button>
+        {/* Link to navigate to SignIn page */}
+        <p>
+          Already have an account?{" "}
+          <span className="signin-link" onClick={() => navigate("/signin")}>
+            Sign In
+          </span>
+        </p>
       </form>
     </div>
   );
 }
 
 export default SignUp;
+
