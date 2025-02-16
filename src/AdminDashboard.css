@@ -21,7 +21,7 @@
 }
 
 .session-form button {
-  background: blue;
+  background: #00ff11;
   color: white;
   padding: 10px 15px;
   border: none;
@@ -48,10 +48,11 @@
 }
 
 .session-card button {
-  background: red;
+  background: #3cff00;
   color: white;
   padding: 5px 10px;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
 }
 .home-button {

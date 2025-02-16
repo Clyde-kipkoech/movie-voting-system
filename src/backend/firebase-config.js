@@ -5,10 +5,10 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
-    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    apiKey: "AIzaSyCuO__7hVK3Xknk_oohzwfmGFgii-wpnnA",
+    authDomain: "movie-system-e6033.firebaseapp.com",
+    databaseURL: " https://movie-system-e6033-default-rtdb.firebaseio.com",
+    projectId: "movie-system-e6033",
     storageBucket: "movie-system-e6033.firebasestorage.app",
     messagingSenderId: "345322830466",
     appId: "1:345322830466:web:5d8bd2f3a41561c1d4529b",

@@ -36,7 +36,7 @@
   
   .nav_votingButton {
     padding: 8px 12px;
-    background-color: red;
+    background-color: rgb(17, 255, 0);
     color: white;
     border: none;
     cursor: pointer;
@@ -45,11 +45,11 @@
   }
   
   .nav_votingButton:hover {
-    background-color: #e50914;
+    background-color: #09e58d;
   }
   .nav_button{
     padding: 8px 12px;
-    background-color: red;
+    background-color: rgb(0, 255, 81);
     color: white;
     border: none;
     cursor: pointer;
