@@ -7,15 +7,19 @@
     justify-content: center;
     align-items: center;
     padding: 2rem;
+    font-size: 16px;
   }
   
   .form-signIn{
     background-color: rgba(0, 0, 0, 0.7);
-    padding: 2rem;
+    padding: 48px 68px;
     border-radius: 12px;
     max-width: 400px;
+    min-height: 550px;
     width: 100%;
     box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    position: relative;
   }
   
   h2 {
@@ -30,6 +34,7 @@
     width: 100%;
     padding: 12px 16px;
     margin: 12px 0;
+    margin-top: 20px;
     border: none;
     border-radius: 8px;
     background-color: rgba(0, 0, 0, 0.7);
@@ -53,17 +58,22 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s;
+    margin-top: 20px;
   }
   
   .signinbtn:hover {
     background-color: #08f010;
   }
-  .signup-link {
-    color: blue;
-    cursor: pointer;
-    text-decoration: underline;
+  p{
+    margin-top: 20px;
   }
-  .signin-link:hover {
-    color: darkblue;
+  .signup-link {
+    color: rgb(48, 48, 180);
+    cursor: pointer;
+    
+  }
+  .signup-link:hover {
+    color: rgb(16, 16, 247);
+    text-decoration: underline;
   }
   

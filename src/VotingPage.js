@@ -41,10 +41,28 @@ const VotingPage = () => {
         voteCounts[movieId] = (voteCounts[movieId] || 0) + 1;
       });
       setVotes(voteCounts);
+  
+      // Determine the winning movie
+      const winningMovieId = Object.keys(voteCounts).reduce((a, b) => 
+        voteCounts[a] > voteCounts[b] ? a : b, null
+      );
+  
+      if (winningMovieId) {
+        // Get the movie details from `movies` state
+        const winningMovieDetails = movies.find(movie => movie.id === parseInt(winningMovieId));
+        if (winningMovieDetails) {
+          setWinningMovie({
+            title: winningMovieDetails.title,
+            votes: voteCounts[winningMovieId],
+            poster: winningMovieDetails.poster_path,
+          });
+        }
+      }
     });
+  
     return () => unsubscribe();
-  }, []);
-
+  }, [movies]); // Depend on `movies` to get movie details
+  
   useEffect(() => {
     const fetchWinningMovie = async () => {
       const docRef = doc(db, "winningMovie", "current");
@@ -89,13 +107,20 @@ const VotingPage = () => {
   return (
     <div className="voting-container">
       <h1 className="voting-title">Vote for Your Favorite Movie 🎥</h1>
-
       {winningMovie ? (
-        <div className="winner-announcement">
-          <h2>🏆 Winning Movie: {winningMovie.movieId}</h2>
-          <p>Votes: {winningMovie.votes}</p>
-        </div>
-      ) : (
+  <div className="winner-announcement">
+    <h2>🏆 Winning Movie: {winningMovie.title}</h2>
+    <p>Votes: {winningMovie.votes}</p>
+    <img 
+      src={`https://image.tmdb.org/t/p/w500${winningMovie.poster}`} 
+      alt={winningMovie.title} 
+      className="winning-movie-poster"
+    />
+  </div>
+) : (
+  <h2>No votes yet</h2>
+)}
+       : (
         <>
           <div className="movie-grid">
             {movies.map((movie) => (
@@ -118,7 +143,7 @@ const VotingPage = () => {
             Submit Your Vote
           </button>
         </>
-      )}
+      )
 
       <button onClick={goToHome} className="home-button">
         Go to Home
