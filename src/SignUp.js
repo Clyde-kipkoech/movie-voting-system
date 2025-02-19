@@ -29,7 +29,7 @@ function SignUp() {
 
   return (
     <div className="sign-up-container">
-      <form onSubmit={handleSignUp}>
+      <form onSubmit={handleSignUp} className="form-signUp">
         <h2>Sign Up</h2>
         <input
           type="email"
@@ -37,6 +37,7 @@ function SignUp() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="input-signUp"
         />
         <input
           type="password"
@@ -44,8 +45,9 @@ function SignUp() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="input-signUp"
         />
-        <button type="submit">Sign Up</button>
+        <button type="submit" className="signupbtn">Sign Up</button>
         {/* Link to navigate to SignIn page */}
         <p>
           Already have an account?{" "}

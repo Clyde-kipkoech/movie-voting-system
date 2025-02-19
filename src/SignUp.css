@@ -1,16 +1,17 @@
 /* Full-page layout for sign-up */
 .sign-up-container {
     min-height: 100vh;
-    background: url(https://i.pinimg.com/736x/b2/f2/4b/b2f24bfd3d0fcc2622e3f25b7acae892.jpg);
+    background: url(https://assets.nflxext.com/ffe/siteui/vlv3/f268d374-734d-474f-ad13-af5ba87ef9fc/web/KE-en-20250210-TRIFECTA-perspective_8f58a888-4099-4d0c-b1be-9a212efacfbc_medium.jpg);
     color: white;
+    background-color: rgb(0, 0, 0);
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 2rem;
   }
   
-  form {
-    background: rgba(255, 255, 255, 0.8); /* Transparent white background */
+  .form-signUp {
+    background-color: rgba(0, 0, 0, 0.7); 
     padding: 2rem;
     border-radius: 12px;
     max-width: 400px;
@@ -26,30 +27,24 @@
     color: #f97316;
   }
   
-  input {
+  .input-signUp {
     width: 100%;
     padding: 12px 16px;
     margin: 12px 0;
     border: none;
     border-radius: 8px;
-    background-color: #334155;
+    background-color: rgba(0, 0, 0, 0.7);
     color: white;
     font-size: 1rem;
   }
   
-  input::placeholder {
-    color: #94a3b8;
-  }
   
-  input:focus {
-    outline: 2px solid #f97316;
-    background-color: #475569;
-  }
   
-  button[type="submit"] {
+  
+  .signupbtn {
     width: 100%;
     padding: 14px 0;
-    background-color: #f97316;
+    background-color: #4caf50;
     color: white;
     font-size: 1rem;
     font-weight: bold;
@@ -59,8 +54,8 @@
     transition: background-color 0.3s;
   }
   
-  button[type="submit"]:hover {
-    background-color: #ea580c;
+  .signupbtn:hover {
+    background-color: #11e818;
   }
   .signin-link {
     color: blue;

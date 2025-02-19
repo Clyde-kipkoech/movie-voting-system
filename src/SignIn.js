@@ -28,7 +28,7 @@ function SignIn() {
 
   return (
     <div className="sign-in-container">
-      <form onSubmit={handleSignIn}>
+      <form onSubmit={handleSignIn} className="form-signIn">
         <h2>Sign In</h2>
         <input
           type="email"
@@ -36,6 +36,7 @@ function SignIn() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          className="input-signIn"
         />
         <input
           type="password"
@@ -43,8 +44,9 @@ function SignIn() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          className="input-signIn"
         />
-        <button type="submit">Sign In</button>
+        <button type="submit" className="signinbtn">Sign In</button>
          {/* Link to navigate to SignUp page */}
          <p>
           Don't have an account?{" "}
