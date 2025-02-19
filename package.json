@@ -9,6 +9,7 @@
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
+    "email-validator": "^2.0.4",
     "express": "^4.21.2",
     "movie-trailer": "^3.2.2",
     "mysql2": "^3.12.0",
